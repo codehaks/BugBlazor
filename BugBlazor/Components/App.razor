@@ -15,7 +15,17 @@
             <br />
             <InputTextArea @bind-Value="@Bug.Description" class="form-control"></InputTextArea>
             <br />
-            <button type="submit" class="btn btn-primary btn-lg">Add</button>
+
+            @if (ShowConfirmEdit)
+            {
+                <button class="btn btn-primary btn-lg" @onclick="ConfirmEditBug">Apply Edit</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-primary btn-lg">Add</button>
+            }
+
+
         </EditForm>
     </div>
 </div>
@@ -44,9 +54,9 @@
                 <td>@bug.Description</td>
 
                 <td>
-                    <a class="btn btn-default">Details</a>
-                    <a class="btn btn-danger" @onclick="()=>RemoveBug(bug)">Delete</a>
-                    <a class="btn btn-primary">Edit</a>
+                    <a class="btn btn-light">Details</a>
+                    <a class="btn btn-danger"   @onclick="()=>RemoveBug(bug)">Delete</a>
+                    <a class="btn btn-primary"  @onclick="()=>EditBug(bug)">Edit</a>
                 </td>
             </tr>
         }
@@ -56,6 +66,7 @@
 
 @code{
     private Bug Bug = new Bug();
+    bool ShowConfirmEdit;
     public int counter;
 
     public IList<BugBlazor.Models.Bug> Bugs { get; set; }
@@ -63,11 +74,16 @@
     protected override void OnInitialized()
     {
         counter = 1;
+        ShowConfirmEdit = false;
         Bugs = _db.Bugs.ToList();
     }
 
     private void AddBug()
     {
+        if (ShowConfirmEdit)
+        {
+            return;
+        }
         _db.Bugs.Add(Bug);
         _db.SaveChanges();
 
@@ -81,6 +97,19 @@
         _db.SaveChanges();
 
         Bugs.Remove(bug);
+    }
+
+    private void EditBug(Bug bug)
+    {
+        ShowConfirmEdit = true;
+        Bug = bug;
+    }
+
+    private async Task ConfirmEditBug()
+    {
+        _db.Bugs.Update(Bug);
+        await _db.SaveChangesAsync();
+        Bug = new Bug();
     }
 
 

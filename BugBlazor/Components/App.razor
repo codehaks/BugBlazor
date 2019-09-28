@@ -10,7 +10,7 @@
 
         <div class="card">
             <div class="card-header">
-                New Bug
+                @cardTitle
             </div>
             <div class="card-body">
                 <input type="text" @bind="@Bug.Name" class="form-control" />
@@ -28,11 +28,12 @@
 
                 @if (ShowConfirmEdit)
                 {
-                    <button class="btn btn-primary btn-lg" @onclick="ConfirmEditBug">Apply Edit</button>
+                    <button class="btn btn-primary" @onclick="ConfirmEditBug">Apply Edit</button>
+                    <button class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
                 }
                 else
                 {
-                    <button type="submit" class="btn btn-primary btn-lg" @onclick="AddBug">Add</button>
+                    <button class="btn btn-primary" @onclick="AddBug">Add</button>
                 }
             </div>
         </div>
@@ -75,6 +76,7 @@
     private Bug Bug = new Bug();
     bool ShowConfirmEdit;
     public int counter;
+    private string cardTitle;
 
     public IList<BugBlazor.Models.Bug> Bugs { get; set; }
 
@@ -83,6 +85,7 @@
         counter = 1;
         ShowConfirmEdit = false;
         Bugs = _db.Bugs.ToList();
+        cardTitle = "New Bug";
     }
 
     private void AddBug()
@@ -110,7 +113,15 @@
     private void EditBug(Bug bug)
     {
         ShowConfirmEdit = true;
+        cardTitle = $"Edit Bug : {bug.Id}";
         Bug = bug;
+    }
+
+    private void CancelEdit()
+    {
+        ShowConfirmEdit = false;
+        Bug = new Bug();
+        cardTitle = "New Bug";
     }
 
     private async Task ConfirmEditBug()
@@ -119,6 +130,7 @@
         await _db.SaveChangesAsync();
         Bug = new Bug();
         ShowConfirmEdit = false;
+        cardTitle = "New bug";
     }
 
 

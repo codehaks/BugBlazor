@@ -2,7 +2,7 @@
 @using BugBlazor.Data
 @using BugBlazor.Models
 @inject BugBlazor.Data.BugDb _db
-@inject IJSRuntime JsRuntime;
+@inject IJSRuntime _jsRuntime;
 
 
 <div class="row mb-3">
@@ -55,7 +55,7 @@
         @for (int i = 0; i < Bugs.Count; i++)
         {
             var bug = Bugs[i];
-            <tr class=@(bug.State==StateType.Done ? "table-success" : "") @onclick="()=>EditBug(bug)" style="cursor:pointer">
+            <tr class=@(bug.State==StateType.Done ? "table-success" : "") style="cursor:pointer">
 
                 <td>@(i + 1)</td>
                 <td>@bug.Name</td>
@@ -71,6 +71,26 @@
 
     </tbody>
 </table>
+
+<div id="mymodal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code{
     private Bug Bug = new Bug();
@@ -99,15 +119,22 @@
 
         Bugs.Add(Bug);
         Bug = new Bug();
-        JsRuntime.InvokeVoidAsync("toastr.success", "New bug added");
+        _jsRuntime.InvokeVoidAsync("toastr.success", "New bug added");
     }
 
-    private void RemoveBug(Bug bug)
+    private async Task RemoveBug(Bug bug)
     {
-        _db.Bugs.Remove(bug);
-        _db.SaveChanges();
 
-        Bugs.Remove(bug);
+
+        var confirmed = await _jsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            _db.Bugs.Remove(bug);
+            _db.SaveChanges();
+
+            Bugs.Remove(bug);
+        }
+
     }
 
     private void EditBug(Bug bug)

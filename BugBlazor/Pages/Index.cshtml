@@ -7,4 +7,7 @@
 <h1>Bug Blazor</h1>
 <hr />
 
+<App>
+    @(await Html.RenderComponentAsync<BugBlazor.Components.App>(RenderMode.ServerPrerendered))
+</App>
 

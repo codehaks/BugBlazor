@@ -7,32 +7,34 @@
 
 <div class="row mb-3">
     <div class="col-6">
-        <h3>New Bug</h3>
-        <div>
 
-            <input type="text" @bind="@Bug.Name" class="form-control" />
-            <br />
-            <textarea @bind="@Bug.Description" class="form-control"></textarea>
-            <br />
-            <select class="form-control" @bind="@Bug.State">
+        <div class="card">
+            <div class="card-header">
+                New Bug
+            </div>
+            <div class="card-body">
+                <input type="text" @bind="@Bug.Name" class="form-control" />
+                <br />
+                <textarea @bind="@Bug.Description" class="form-control"></textarea>
+                <br />
+                <select class="form-control" @bind="@Bug.State">
 
-                <option value=@StateType.New>@StateType.New.ToString()</option>
-                <option value=@StateType.Commited>@StateType.Commited.ToString()</option>
-                <option value=@StateType.Done>@StateType.Done.ToString()</option>
+                    <option value=@StateType.New>@StateType.New.ToString()</option>
+                    <option value=@StateType.Commited>@StateType.Commited.ToString()</option>
+                    <option value=@StateType.Done>@StateType.Done.ToString()</option>
 
-            </select>
-            <br />
+                </select>
+                <br />
 
-            @if (ShowConfirmEdit)
-            {
-                <button class="btn btn-primary btn-lg" @onclick="ConfirmEditBug">Apply Edit</button>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-primary btn-lg" @onclick="AddBug">Add</button>
-            }
-
-
+                @if (ShowConfirmEdit)
+                {
+                    <button class="btn btn-primary btn-lg" @onclick="ConfirmEditBug">Apply Edit</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary btn-lg" @onclick="AddBug">Add</button>
+                }
+            </div>
         </div>
     </div>
 </div>
@@ -42,7 +44,6 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Id</th>
             <th>Name</th>
             <th>Desc</th>
             <th>State</th>
@@ -53,10 +54,9 @@
         @for (int i = 0; i < Bugs.Count; i++)
         {
             var bug = Bugs[i];
-            <tr class=@(bug.State==StateType.Done ? "table-success" : "")>
+            <tr class=@(bug.State==StateType.Done ? "table-success" : "") @onclick="()=>EditBug(bug)" style="cursor:pointer">
 
                 <td>@(i + 1)</td>
-                <td>@bug.Id</td>
                 <td>@bug.Name</td>
                 <td>@bug.Description</td>
                 <td>@bug.State</td>

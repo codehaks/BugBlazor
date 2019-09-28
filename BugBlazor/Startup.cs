@@ -38,7 +38,9 @@ namespace BugBlazor
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapBlazorHub();
                 endpoints.MapRazorPages();
+                endpoints.MapFallbackToPage("/index");
             });
         }
     }

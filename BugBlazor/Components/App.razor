@@ -53,7 +53,7 @@
         @for (int i = 0; i < Bugs.Count; i++)
         {
             var bug = Bugs[i];
-            <tr>
+            <tr class=@(bug.State==StateType.Done ? "table-success" : "") >
 
                 <td>@(i + 1)</td>
                 <td>@bug.Id</td>
@@ -61,9 +61,9 @@
                 <td>@bug.Description</td>
                 <td>@bug.State</td>
                 <td>
-                    <a class="btn btn-light">Details</a>
-                    <a class="btn btn-danger" @onclick="()=>RemoveBug(bug)">Delete</a>
-                    <a class="btn btn-primary" @onclick="()=>EditBug(bug)">Edit</a>
+                    <a class="btn btn-light" style="cursor:pointer">Details</a>
+                    <a class="btn btn-danger" style="cursor:pointer" @onclick="()=>RemoveBug(bug)">Delete</a>
+                    <a class="btn btn-primary" style="cursor:pointer" @onclick="()=>EditBug(bug)">Edit</a>
                 </td>
             </tr>
         }

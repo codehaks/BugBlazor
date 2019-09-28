@@ -9,11 +9,11 @@
 <div class="row mb-3">
     <div class="col-6">
         <h3>New Bug</h3>
-        <EditForm Model="@Bug" OnValidSubmit="@AddBug">
+        <div>
 
-            <InputText id="name" @bind-Value="@Bug.Name" class="form-control" />
+            <input type="text" id="name" @bind="@Bug.Name" class="form-control" />
             <br />
-            <InputTextArea @bind-Value="@Bug.Description" class="form-control"></InputTextArea>
+            <textarea @bind="@Bug.Description" class="form-control"></textarea>
             <br />
 
             @if (ShowConfirmEdit)
@@ -22,11 +22,11 @@
             }
             else
             {
-                <button type="submit" class="btn btn-primary btn-lg">Add</button>
+                <button type="submit" class="btn btn-primary btn-lg" @onclick="AddBug">Add</button>
             }
 
 
-        </EditForm>
+        </div>
     </div>
 </div>
 

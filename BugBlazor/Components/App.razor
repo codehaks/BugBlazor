@@ -9,7 +9,7 @@
 <div class="row mb-3">
     <div class="col-6">
         <h3>New Bug</h3>
-        <EditForm Model="@Bug" OnValidSubmit="@Add">
+        <EditForm Model="@Bug" OnValidSubmit="@AddBug">
 
             <InputText id="name" @bind-Value="@Bug.Name" class="form-control" />
             <br />
@@ -38,19 +38,19 @@
             var bug = Bugs[i];
             <tr>
 
-                <td>@(i+1)</td>
+                <td>@(i + 1)</td>
                 <td>@bug.Id</td>
                 <td>@bug.Name</td>
                 <td>@bug.Description</td>
 
                 <td>
-                    <a asp-page="details" asp-route-id="@bug.Id" class="btn btn-default">Details</a>
-                    <a asp-page="delete" asp-route-id="@bug.Id" class="btn btn-danger">Delete</a>
-                    <a asp-page="edit" asp-route-id="@bug.Id" class="btn btn-primary">Edit</a>
+                    <a class="btn btn-default">Details</a>
+                    <a class="btn btn-danger" @onclick="()=>RemoveBug(bug)">Delete</a>
+                    <a class="btn btn-primary">Edit</a>
                 </td>
             </tr>
         }
-       
+
     </tbody>
 </table>
 
@@ -66,13 +66,21 @@
         Bugs = _db.Bugs.ToList();
     }
 
-    private void Add()
+    private void AddBug()
     {
         _db.Bugs.Add(Bug);
         _db.SaveChanges();
 
         Bugs.Add(Bug);
         Bug = new Bug();
+    }
+
+    private void RemoveBug(Bug bug)
+    {
+        _db.Bugs.Remove(bug);
+        _db.SaveChanges();
+
+        Bugs.Remove(bug);
     }
 
 

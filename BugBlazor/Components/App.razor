@@ -1,7 +1,6 @@
 ﻿
 @using BugBlazor.Data
 @using BugBlazor.Models
-
 @inject BugBlazor.Data.BugDb _db
 
 
@@ -11,9 +10,17 @@
         <h3>New Bug</h3>
         <div>
 
-            <input type="text" id="name" @bind="@Bug.Name" class="form-control" />
+            <input type="text" @bind="@Bug.Name" class="form-control" />
             <br />
             <textarea @bind="@Bug.Description" class="form-control"></textarea>
+            <br />
+            <select class="form-control" @bind="@Bug.State">
+
+                <option value=@StateType.New>@StateType.New.ToString()</option>
+                <option value=@StateType.Commited>@StateType.Commited.ToString()</option>
+                <option value=@StateType.Done>@StateType.Done.ToString()</option>
+
+            </select>
             <br />
 
             @if (ShowConfirmEdit)
@@ -38,7 +45,7 @@
             <th>Id</th>
             <th>Name</th>
             <th>Desc</th>
-
+            <th>State</th>
             <th></th>
         </tr>
     </thead>
@@ -52,11 +59,11 @@
                 <td>@bug.Id</td>
                 <td>@bug.Name</td>
                 <td>@bug.Description</td>
-
+                <td>@bug.State</td>
                 <td>
                     <a class="btn btn-light">Details</a>
-                    <a class="btn btn-danger"   @onclick="()=>RemoveBug(bug)">Delete</a>
-                    <a class="btn btn-primary"  @onclick="()=>EditBug(bug)">Edit</a>
+                    <a class="btn btn-danger" @onclick="()=>RemoveBug(bug)">Delete</a>
+                    <a class="btn btn-primary" @onclick="()=>EditBug(bug)">Edit</a>
                 </td>
             </tr>
         }
@@ -110,6 +117,7 @@
         _db.Bugs.Update(Bug);
         await _db.SaveChangesAsync();
         Bug = new Bug();
+        ShowConfirmEdit = false;
     }
 
 

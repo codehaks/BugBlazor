@@ -2,14 +2,16 @@
 using BugBlazor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BugBlazor.Migrations
 {
     [DbContext(typeof(BugDb))]
-    partial class BugDbModelSnapshot : ModelSnapshot
+    [Migration("20190928102041_BugState")]
+    partial class BugState
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -4,6 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
+@section styles{
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" /> }
 <h1>Bug Blazor</h1>
 <hr />
 
@@ -11,3 +13,6 @@
     @(await Html.RenderComponentAsync<BugBlazor.Components.App>(RenderMode.ServerPrerendered))
 </app>
 
+@section scripts{
+    <script src="~/lib/toastr/toastr.min.js"></script>
+}

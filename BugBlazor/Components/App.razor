@@ -2,7 +2,7 @@
 @using BugBlazor.Data
 @using BugBlazor.Models
 @inject BugBlazor.Data.BugDb _db
-
+@inject IJSRuntime JsRuntime;
 
 
 <div class="row mb-3">
@@ -53,7 +53,7 @@
         @for (int i = 0; i < Bugs.Count; i++)
         {
             var bug = Bugs[i];
-            <tr class=@(bug.State==StateType.Done ? "table-success" : "") >
+            <tr class=@(bug.State==StateType.Done ? "table-success" : "")>
 
                 <td>@(i + 1)</td>
                 <td>@bug.Id</td>
@@ -96,6 +96,7 @@
 
         Bugs.Add(Bug);
         Bug = new Bug();
+        JsRuntime.InvokeVoidAsync("toastr.success", "New bug added");
     }
 
     private void RemoveBug(Bug bug)

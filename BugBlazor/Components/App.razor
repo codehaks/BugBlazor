@@ -1,3 +1,79 @@
-﻿<h3>App</h3>
+﻿
+@using BugBlazor.Data
+@using BugBlazor.Models
 
-<Counter />
+@inject BugBlazor.Data.BugDb _db
+
+
+
+<div class="row mb-3">
+    <div class="col-6">
+        <h3>New Bug</h3>
+        <EditForm Model="@Bug" OnValidSubmit="@Add">
+
+            <InputText id="name" @bind-Value="@Bug.Name" class="form-control" />
+            <br />
+            <InputTextArea @bind-Value="@Bug.Description" class="form-control"></InputTextArea>
+            <br />
+            <button type="submit" class="btn btn-primary btn-lg">Add</button>
+        </EditForm>
+    </div>
+</div>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Desc</th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Bugs.Count; i++)
+        {
+            var bug = Bugs[i];
+            <tr>
+
+                <td>@(i+1)</td>
+                <td>@bug.Id</td>
+                <td>@bug.Name</td>
+                <td>@bug.Description</td>
+
+                <td>
+                    <a asp-page="details" asp-route-id="@bug.Id" class="btn btn-default">Details</a>
+                    <a asp-page="delete" asp-route-id="@bug.Id" class="btn btn-danger">Delete</a>
+                    <a asp-page="edit" asp-route-id="@bug.Id" class="btn btn-primary">Edit</a>
+                </td>
+            </tr>
+        }
+       
+    </tbody>
+</table>
+
+@code{
+    private Bug Bug = new Bug();
+    public int counter;
+
+    public IList<BugBlazor.Models.Bug> Bugs { get; set; }
+
+    protected override void OnInitialized()
+    {
+        counter = 1;
+        Bugs = _db.Bugs.ToList();
+    }
+
+    private void Add()
+    {
+        _db.Bugs.Add(Bug);
+        _db.SaveChanges();
+
+        Bugs.Add(Bug);
+        Bug = new Bug();
+    }
+
+
+}

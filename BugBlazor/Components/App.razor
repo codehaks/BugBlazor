@@ -84,7 +84,8 @@
 
     private void CheckSelect()
     {
-        Bug = Bugs.First(b=>b.Id==12);
+        var selectedBug = Bugs.First(b=>b.Id==12);
+        selectedBug.State = StateType.Commited;
     }
 
     protected override void OnInitialized()
@@ -104,21 +105,23 @@
             await connection.StartAsync();
         };
 
-        connection.On<Bug>("UpdateBug", (bug) =>
+        connection.On<Bug>("UpdateBug", async (bug) =>
         {
-            //_jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
+           // await _jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
             //var selectedBug = Bugs.FirstOrDefault(b=>b.Id==bug.Id);
 
             //selectedBug.Name = bug.Name;
             //selectedBug.State = bug.State;
             //selectedBug.Description = bug.Description;
 
-            //Bug = selectedBug;
-            Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
-            Bug = new Bug
-            {
-                State = StateType.Done
-            };
+            ////Bug = selectedBug;
+            //Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
+            //Bug = new Bug
+            //{
+            //    State = StateType.Done
+            //};
+
+            CheckSelect();
         });
 
         connection.StartAsync();

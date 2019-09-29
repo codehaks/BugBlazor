@@ -13,9 +13,9 @@
                 @cardTitle
             </div>
             <div class="card-body">
-                <input type="text" @bind="@Bug.Name" class="form-control" />
+                <input type="text" placeholder="Name" @bind="@Bug.Name" class="form-control" />
                 <br />
-                <textarea @bind="@Bug.Description" class="form-control"></textarea>
+                <textarea placeholder="Description" @bind="@Bug.Description" class="form-control"></textarea>
                 <br />
                 <select class="form-control" @bind="@Bug.State">
 
@@ -155,6 +155,7 @@
     {
         _db.Bugs.Update(Bug);
         await _db.SaveChangesAsync();
+        await _jsRuntime.InvokeVoidAsync("toastr.success", "Bug upated");
         Bug = new Bug();
         ShowConfirmEdit = false;
         cardTitle = "New bug";

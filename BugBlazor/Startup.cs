@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BugBlazor.Data;
+using BugBlazor.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,7 @@ namespace BugBlazor
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
             services.AddServerSideBlazor();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +40,7 @@ namespace BugBlazor
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<BugHub>("/bughub");
                 endpoints.MapBlazorHub();
                 endpoints.MapRazorPages();
                 endpoints.MapFallbackToPage("/index");

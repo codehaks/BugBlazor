@@ -1,10 +1,12 @@
 ﻿
 @using BugBlazor.Data
 @using BugBlazor.Models
+@using Microsoft.AspNetCore.SignalR.Client;
+
 @inject BugBlazor.Data.BugDb _db
 @inject IJSRuntime _jsRuntime;
 
-
+<button class="btn btn-primary" @onclick="CheckSelect">Check</button>
 <div class="row mb-3">
     <div class="col-6">
 
@@ -58,7 +60,7 @@
             <tr class=@(bug.State==StateType.Done ? "table-success" : "") style="cursor:pointer">
 
                 <td>@(i + 1)</td>
-                <td>@bug.Name</td>
+                <td>@bug.Name - @bug.Id</td>
                 <td>@bug.Description</td>
                 <td>@bug.State</td>
                 <td>
@@ -77,8 +79,13 @@
     bool ShowConfirmEdit;
     public int counter;
     private string cardTitle;
-
+    private HubConnection connection;
     public IList<BugBlazor.Models.Bug> Bugs { get; set; }
+
+    private void CheckSelect()
+    {
+        Bug = Bugs.First(b=>b.Id==12);
+    }
 
     protected override void OnInitialized()
     {
@@ -86,6 +93,35 @@
         ShowConfirmEdit = false;
         Bugs = _db.Bugs.ToList();
         cardTitle = "New Bug";
+
+        connection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:5001/bughub")
+                .Build();
+
+        connection.Closed += async (error) =>
+        {
+            await Task.Delay(new Random().Next(0, 5) * 1000);
+            await connection.StartAsync();
+        };
+
+        connection.On<Bug>("UpdateBug", (bug) =>
+        {
+            //_jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
+            //var selectedBug = Bugs.FirstOrDefault(b=>b.Id==bug.Id);
+
+            //selectedBug.Name = bug.Name;
+            //selectedBug.State = bug.State;
+            //selectedBug.Description = bug.Description;
+
+            //Bug = selectedBug;
+            Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
+            Bug = new Bug
+            {
+                State = StateType.Done
+            };
+        });
+
+        connection.StartAsync();
     }
 
     private void AddBug()
@@ -122,6 +158,7 @@
         ShowConfirmEdit = true;
         cardTitle = $"Edit Bug : {bug.Id}";
         Bug = bug;
+
     }
 
     private void CancelEdit()
@@ -136,9 +173,14 @@
         _db.Bugs.Update(Bug);
         await _db.SaveChangesAsync();
         await _jsRuntime.InvokeVoidAsync("toastr.success", "Bug upated");
+
+        await connection.InvokeAsync("NotifyEdited", Bug);
+
         Bug = new Bug();
         ShowConfirmEdit = false;
         cardTitle = "New bug";
+
+
     }
 
 

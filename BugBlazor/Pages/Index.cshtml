@@ -15,4 +15,15 @@
 
 @section scripts{
     <script src="~/lib/toastr/toastr.min.js"></script>
+    <script>
+        window.bugFuncs = {
+            showAlert: function (msg) {
+                alert(msg);
+            },
+            showModal: function () {
+                $("#mymodal").modal("show");
+            }
+        };
+
+    </script>
 }

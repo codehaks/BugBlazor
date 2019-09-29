@@ -4,7 +4,7 @@
 @inject BugBlazor.Data.BugDb _db
 @inject IJSRuntime _jsRuntime;
 
-
+<button @onclick="ShowModal" class=" btn btn-outline-primary"> Show modal</button>
 <div class="row mb-3">
     <div class="col-6">
 
@@ -72,6 +72,26 @@
     </tbody>
 </table>
 
+<div id="mymodal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Danger zone</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Remove </button>
+                <button type="button" class="btn btn-primary">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @code{
     private Bug Bug = new Bug();
     bool ShowConfirmEdit;
@@ -88,6 +108,7 @@
         cardTitle = "New Bug";
     }
 
+ 
     private void AddBug()
     {
         if (ShowConfirmEdit)
@@ -102,6 +123,12 @@
         _jsRuntime.InvokeVoidAsync("toastr.success", "New bug added");
     }
 
+       private async Task ShowRemoveConfirmModal(Bug bug)
+    {
+        //await _jsRuntime.InvokeVoidAsync("$('#mymodal').modal", "show");
+        //await _jsRuntime.InvokeVoidAsync("bugFuncs.showAlert","Hello");
+        await _jsRuntime.InvokeVoidAsync("bugFuncs.showModal");
+    }
     private async Task RemoveBug(Bug bug)
     {
 

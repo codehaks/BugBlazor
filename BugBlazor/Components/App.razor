@@ -107,25 +107,27 @@
 
         connection.On<Bug>("UpdateBug",  (bug) =>
         {
-            Bugs = _db.Bugs.ToList();
+            //Bugs = _db.Bugs.ToList();
 
-             _jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
+            _jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
 
-        //var selectedBug = Bugs.FirstOrDefault(b=>b.Id==bug.Id);
+            var selectedBug = Bugs.FirstOrDefault(b => b.Id == bug.Id);
 
-        //selectedBug.Name = bug.Name;
-        //selectedBug.State = bug.State;
-        //selectedBug.Description = bug.Description;
+            selectedBug.Name = bug.Name;
+            selectedBug.State = bug.State;
+            selectedBug.Description = bug.Description;
 
-        ////Bug = selectedBug;
-        //Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
-        //Bug = new Bug
-        //{
-        //    State = StateType.Done
-        //};
+            StateHasChanged();
 
-        //CheckSelect();
-    });
+            ////Bug = selectedBug;
+            //Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
+            //Bug = new Bug
+            //{
+            //    State = StateType.Done
+            //};
+
+            //CheckSelect();
+        });
 
         connection.StartAsync();
     }

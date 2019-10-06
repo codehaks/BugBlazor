@@ -57,12 +57,12 @@
         @for (int i = 0; i < Bugs.Count; i++)
         {
             var bug = Bugs[i];
-            <tr class=@(bug.State==StateType.Done ? "table-success" : "") style="cursor:pointer">
+            <tr class=@(bug.State==StateType.Done ? "table-success" : "") style="cursor:pointer" @key="bug.Id">
 
                 <td>@(i + 1)</td>
-                <td>@bug.Name - @bug.Id</td>
+                <td>@bug.Name</td>
                 <td>@bug.Description</td>
-                <td>@bug.State</td>
+                <td >@bug.State</td>
                 <td>
                     <a class="btn btn-light" style="cursor:pointer">Details</a>
                     <a class="btn btn-danger" style="cursor:pointer" @onclick="()=>RemoveBug(bug)">Delete</a>
@@ -84,7 +84,7 @@
 
     private void CheckSelect()
     {
-        var selectedBug = Bugs.First(b=>b.Id==12);
+        var selectedBug = Bugs.First(b => b.Id == 12);
         selectedBug.State = StateType.Commited;
     }
 
@@ -105,24 +105,27 @@
             await connection.StartAsync();
         };
 
-        connection.On<Bug>("UpdateBug", async (bug) =>
+        connection.On<Bug>("UpdateBug",  (bug) =>
         {
-           // await _jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
-            //var selectedBug = Bugs.FirstOrDefault(b=>b.Id==bug.Id);
+            Bugs = _db.Bugs.ToList();
 
-            //selectedBug.Name = bug.Name;
-            //selectedBug.State = bug.State;
-            //selectedBug.Description = bug.Description;
+             _jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
 
-            ////Bug = selectedBug;
-            //Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
-            //Bug = new Bug
-            //{
-            //    State = StateType.Done
-            //};
+        //var selectedBug = Bugs.FirstOrDefault(b=>b.Id==bug.Id);
 
-            CheckSelect();
-        });
+        //selectedBug.Name = bug.Name;
+        //selectedBug.State = bug.State;
+        //selectedBug.Description = bug.Description;
+
+        ////Bug = selectedBug;
+        //Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
+        //Bug = new Bug
+        //{
+        //    State = StateType.Done
+        //};
+
+        //CheckSelect();
+    });
 
         connection.StartAsync();
     }
@@ -175,7 +178,7 @@
     {
         _db.Bugs.Update(Bug);
         await _db.SaveChangesAsync();
-        await _jsRuntime.InvokeVoidAsync("toastr.success", "Bug upated");
+        await _jsRuntime.InvokeVoidAsync("toastr.success", "Bug updated");
 
         await connection.InvokeAsync("NotifyEdited", Bug);
 

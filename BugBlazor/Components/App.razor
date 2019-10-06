@@ -74,14 +74,12 @@
 @code{
     private Bug Bug = new Bug();
     bool ShowConfirmEdit;
-    public int counter;
     private string cardTitle;
 
     public IList<BugBlazor.Models.Bug> Bugs { get; set; }
 
     protected override void OnInitialized()
     {
-        counter = 1;
         ShowConfirmEdit = false;
         Bugs = _db.Bugs.ToList();
         cardTitle = "New Bug";
@@ -134,7 +132,7 @@
     {
         _db.Bugs.Update(Bug);
         await _db.SaveChangesAsync();
-        await _jsRuntime.InvokeVoidAsync("toastr.success", "Bug upated");
+        await _jsRuntime.InvokeVoidAsync("toastr.success", "Bug updated");
         Bug = new Bug();
         ShowConfirmEdit = false;
         cardTitle = "New bug";

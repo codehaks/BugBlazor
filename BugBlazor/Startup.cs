@@ -42,6 +42,7 @@ namespace BugBlazor
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<BugHub>("/bughub");
+                endpoints.MapHub<CounterHub>("/counterhub");
                 endpoints.MapBlazorHub();
                 endpoints.MapRazorPages();
                 endpoints.MapFallbackToPage("/index");

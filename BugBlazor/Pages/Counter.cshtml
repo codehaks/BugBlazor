@@ -1,16 +1,14 @@
 ﻿@page
-@model BugBlazor.Pages.IndexModel
+@model BugBlazor.Pages.CounterModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Counter";
 }
 
 @section styles{
     <link href="~/lib/toastr/toastr.css" rel="stylesheet" /> }
-<h1>Bug Blazor</h1>
-<hr />
 
 <app>
-    @(await Html.RenderComponentAsync<BugBlazor.Components.App>(RenderMode.Server))
+    @(await Html.RenderComponentAsync<BugBlazor.Components.Counter>(RenderMode.ServerPrerendered))
 </app>
 
 @section scripts{

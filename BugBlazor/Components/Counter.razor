@@ -1,16 +1,53 @@
 ﻿@page "/counter"
 
+@using Microsoft.AspNetCore.SignalR.Client;
+@inject IJSRuntime _jsRuntime;
+
 <h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
+<p>
+    Current count:
+
+    <input @bind="currentCount" />
+
+</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
     int currentCount = 1;
+    private HubConnection connection;
 
-    void IncrementCount()
+    async Task IncrementCount()
     {
         currentCount++;
+        await connection.InvokeAsync("SendNumber", currentCount);
+    }
+
+
+    protected override void OnInitialized()
+    {
+
+        connection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:5001/counterhub")
+                .Build();
+
+        connection.Closed += async (error) =>
+        {
+            await Task.Delay(new Random().Next(0, 5) * 1000);
+            await connection.StartAsync();
+        };
+
+        connection.On<int>("UpdateNumber", (number) =>
+        {
+
+            _jsRuntime.InvokeVoidAsync("toastr.warning", $"Counter updated to [{number}]");
+
+            currentCount = number;
+            StateHasChanged();
+
+        });
+
+        connection.StartAsync();
     }
 }

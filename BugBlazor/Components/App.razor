@@ -6,7 +6,6 @@
 @inject BugBlazor.Data.BugDb _db
 @inject IJSRuntime _jsRuntime;
 
-<button class="btn btn-primary" @onclick="CheckSelect">Check</button>
 <div class="row mb-3">
     <div class="col-6">
 
@@ -107,10 +106,7 @@
 
         connection.On<Bug>("UpdateBug",  (bug) =>
         {
-            //Bugs = _db.Bugs.ToList();
-
             _jsRuntime.InvokeVoidAsync("toastr.warning", $"Bug [{bug.Name}] updated by others.");
-
             var selectedBug = Bugs.FirstOrDefault(b => b.Id == bug.Id);
 
             selectedBug.Name = bug.Name;
@@ -119,14 +115,6 @@
 
             StateHasChanged();
 
-            ////Bug = selectedBug;
-            //Bug=Bugs.FirstOrDefault(b=>b.Id==bug.Id);
-            //Bug = new Bug
-            //{
-            //    State = StateType.Done
-            //};
-
-            //CheckSelect();
         });
 
         connection.StartAsync();

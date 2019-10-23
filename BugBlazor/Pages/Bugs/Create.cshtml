@@ -1,0 +1,11 @@
+﻿@page
+@model BugBlazor.CreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<hr />
+<app>
+    @(await Html.RenderComponentAsync<BugBlazor.Components.BugDescription>(RenderMode.Server))
+</app>

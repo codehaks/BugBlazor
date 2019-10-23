@@ -1,0 +1,10 @@
+﻿<h3>BugDescription</h3>
+
+@*<input @bind-value="Description" @bind-value:event="onkeydown" class="form-control" />*@
+<textarea @bind="Description" class="form-control" ></textarea>
+<span>@(Description.Length)</span>
+
+@code {
+    string Description="";
+
+}

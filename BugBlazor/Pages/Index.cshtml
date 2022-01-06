@@ -1,7 +1,7 @@
 ﻿@page
 @model BugBlazor.Pages.IndexModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "BugBlazor";
 }
 
 @section styles{
@@ -10,8 +10,6 @@
 <hr />
 
 <app>
-    @*@(await Html.RenderComponentAsync<BugBlazor.Components.BugDescription>(RenderMode.Server))*@
-
     @(await Html.RenderComponentAsync<BugBlazor.Components.App>(RenderMode.Server))
 </app>
 
